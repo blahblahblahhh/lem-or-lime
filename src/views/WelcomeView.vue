@@ -14,9 +14,10 @@
       <h2 class="question-text">
         WHAT MAKES<br>
         STARRY SO<br>
-        REFRESHING?
+        REFRESHING?<br>
+        <br>
+        <span>CHOOSE A SIDE!</span>
       </h2>
-      <p class="choose-text">CHOOSE A SIDE!</p>
     </div>
 
     <div class="split-screen">
@@ -160,6 +161,9 @@ const goToLime = () => {
   text-transform: uppercase;
   letter-spacing: 2px;
   text-shadow: 2px 2px 0px rgba(255,255,255,0.8);
+  font-style: italic;
+  font-family: verdana;
+  font-weight: bold;
 }
 
 .choose-text {
