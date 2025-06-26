@@ -12,7 +12,7 @@ The app now supports a separate display route for playing videos full screen whe
 
 ### How it works:
 
-1. **Main Interface** (`/`): When users click Team Lem or Team Lime buttons, it:
+1. **Kiosk / selection interface** (`/`): When users click Team Lem or Team Lime buttons, it:
    - Triggers a video on the `/display` route
    - Navigates to the respective `/lemon` or `/lime` voting screen
 
