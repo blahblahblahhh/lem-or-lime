@@ -1,6 +1,6 @@
 <template>
   <div class="video-container" @click="goHome" @touchstart="goHome">
-    <div class="video-wrapper">
+    <!-- <div class="video-wrapper">
       <video 
         ref="videoElement"
         autoplay
@@ -11,21 +11,24 @@
       >
         Your browser does not support the video tag.
       </video>
-    </div>
+    </div> -->
     
     <div class="overlay">
       <div class="content">
+        <img src="/lets-go-lem.webp">
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, onBeforeUnmount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const videoElement = ref(null)
+
+let eventSource = null
 
 const goHome = () => {
   router.push('/')
@@ -38,6 +41,28 @@ onMounted(() => {
     videoElement.value.play().catch(e => {
       console.log('Auto-play was prevented:', e)
     })
+  }
+  
+  // Listen for reset events
+  if (typeof EventSource !== 'undefined') {
+    eventSource = new EventSource('/api/video-events')
+    
+    eventSource.onmessage = (event) => {
+      const data = JSON.parse(event.data)
+      if (data.type === 'reset-voting') {
+        router.push('/')
+      }
+    }
+    
+    eventSource.onerror = (error) => {
+      console.log('EventSource error:', error)
+    }
+  }
+})
+
+onBeforeUnmount(() => {
+  if (eventSource) {
+    eventSource.close()
   }
 })
 </script>
@@ -78,7 +103,10 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
   z-index: 2;
-  display: none;
+}
+
+.overlay img {
+  width: 100vw;
 }
 
 .content {

@@ -74,10 +74,26 @@ const isHoveringLeft = ref(false)
 const isHoveringRight = ref(false)
 
 const goToLemon = () => {
+  fetch('/api/trigger-video', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ video: 'lemon' })
+  }).catch(error => console.log('Trigger video error:', error))
+  
   router.push('/lemon')
 }
 
 const goToLime = () => {
+  fetch('/api/trigger-video', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ video: 'lime' })
+  }).catch(error => console.log('Trigger video error:', error))
+  
   router.push('/lime')
 }
 </script>
