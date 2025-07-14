@@ -2,7 +2,6 @@
   <div class="display-container">
     <video 
       ref="videoElement"
-      autoplay
       playsinline
       :loop="isLooping"
       class="fullscreen-video"
@@ -11,6 +10,13 @@
     >
       Your browser does not support the video tag.
     </video>
+    
+    <!-- BEGIN Button -->
+    <div v-if="showBeginButton" class="begin-button-overlay">
+      <button @click="beginVideo" class="begin-button">
+        BEGIN
+      </button>
+    </div>
   </div>
 </template>
 
@@ -23,6 +29,7 @@ const route = useRoute()
 const videoElement = ref(null)
 const videoSrc = ref('/intro.mp4')
 const isLooping = ref(true)
+const showBeginButton = ref(true)
 
 let eventSource = null
 
@@ -33,9 +40,11 @@ const onVideoEnded = () => {
   
   if (videoElement.value) {
     videoElement.value.load()
-    videoElement.value.play().catch(e => {
-      console.log('Auto-play was prevented:', e)
-    })
+    videoElement.value.addEventListener('loadeddata', () => {
+      videoElement.value.play().catch(e => {
+        console.log('Auto-play was prevented:', e)
+      })
+    }, { once: true })
   }
   
   fetch('/api/reset-voting', { method: 'POST' })
@@ -54,19 +63,30 @@ const playVideo = (type) => {
   
   if (videoElement.value) {
     videoElement.value.load()
-    videoElement.value.play().catch(e => {
-      console.log('Auto-play was prevented:', e)
-    })
+    videoElement.value.addEventListener('loadeddata', () => {
+      videoElement.value.play().catch(e => {
+        console.log('Auto-play was prevented:', e)
+      })
+    }, { once: true })
+  }
+}
+
+const beginVideo = () => {
+  showBeginButton.value = false
+  if (videoElement.value) {
+    videoElement.value.load()
+    videoElement.value.addEventListener('loadeddata', () => {
+      videoElement.value.play().catch(e => {
+        console.log('Play failed:', e)
+      })
+    }, { once: true })
   }
 }
 
 onMounted(() => {
-  // Start playing intro video immediately
+  // Don't auto-start video, wait for user to click BEGIN
   if (videoElement.value) {
     videoElement.value.load()
-    videoElement.value.play().catch(e => {
-      console.log('Auto-play was prevented:', e)
-    })
   }
   
   if (typeof EventSource !== 'undefined') {
@@ -114,5 +134,51 @@ onBeforeUnmount(() => {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+.begin-button-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.begin-button {
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #32CD32 100%);
+  border: none;
+  border-radius: 50px;
+  padding: 2rem 4rem;
+  font-size: 2rem;
+  font-weight: 900;
+  color: #000;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+  letter-spacing: 3px;
+  font-family: 'Arial Black', Arial, sans-serif;
+  transform: scale(1);
+}
+
+.begin-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+}
+
+.begin-button:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+  .begin-button {
+    padding: 1.5rem 3rem;
+    font-size: 1.5rem;
+  }
 }
 </style>
