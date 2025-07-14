@@ -74,6 +74,10 @@ onBeforeUnmount(() => {
   position: relative;
   cursor: pointer;
   overflow: hidden;
+  background-image: url('/background-lem.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .video-wrapper {

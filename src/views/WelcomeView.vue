@@ -119,6 +119,15 @@ const goToLime = () => {
   background-repeat: no-repeat;
 }
 
+/* Add DrukWideBold font */
+@font-face {
+  font-family: 'DrukWideBold';
+  src: url('/DrukWideBold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 .main-title {
   position: absolute;
   top: 45%;
@@ -161,9 +170,10 @@ const goToLime = () => {
   text-transform: uppercase;
   letter-spacing: 2px;
   text-shadow: 2px 2px 0px rgba(255,255,255,0.8);
-  font-style: italic;
-  font-family: verdana;
+  font-style: italic !important;
+  font-family: 'DrukWideBold', verdana, sans-serif;
   font-weight: bold;
+  transform: skew(-10deg);
 }
 
 .choose-text {
@@ -179,6 +189,28 @@ const goToLime = () => {
   display: flex;
   width: 100%;
   height: 100%;
+}
+
+.split-screen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  z-index: -1;
+}
+
+.split-screen::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(135deg, #32CD32 0%, #228B22 100%);
+  z-index: -1;
 }
 
 .column {
@@ -197,9 +229,19 @@ const goToLime = () => {
   /* padding-left: 4rem; */
 }
 
+.left-column .character-container {
+  left: 0;
+  justify-content: flex-start;
+}
+
 .right-column {
   align-items: flex-end;
   /* padding-right: 4rem; */
+}
+
+.right-column .character-container {
+  right: 0;
+  justify-content: flex-end;
 }
 
 .column.hover-left,
@@ -208,18 +250,22 @@ const goToLime = () => {
 }
 
 .character-container {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  height: 100%;
-  margin-top: 2rem;
+  pointer-events: none;
 }
 
 .character-image {
-  /* max-width: clamp(200px, 25vw, 350px); */
-  max-height: 80vh;
+  height: 100vh;
   width: auto;
-  height: auto;
+  max-width: none;
+  object-fit: contain;
+  object-position: bottom;
   filter: drop-shadow(5px 5px 15px rgba(0, 0, 0, 0.3));
   transition: transform 0.3s ease;
 }
@@ -229,7 +275,8 @@ const goToLime = () => {
 }
 
 .team-button-container {
-  position: relative;
+  position: absolute;
+  bottom: 20px;
   z-index: 5;
   width: 100%;
   display: flex;
@@ -317,17 +364,21 @@ const goToLime = () => {
   100% { opacity: 1; transform: scale(1.3); }
 }
 
-/* Minimal Mobile Responsiveness - Only for visibility */
+/* Mobile Responsiveness - Characters remain responsive on mobile */
 @media (max-width: 768px) {
   .main-title {
     top: 20%;
   }
   
-  /* Ensure characters don't get too large and cut off */
+  /* On mobile, characters should remain responsive */
   .character-image {
-    max-height: 70vh;
+    height: 70vh;
     max-width: 90vw;
     object-fit: contain;
+  }
+  
+  .character-container {
+    height: 70vh;
   }
   
   /* Make sure buttons are visible and appropriately sized */
@@ -347,8 +398,12 @@ const goToLime = () => {
 @media (max-width: 480px) {
   /* Further constraints for very small screens */
   .character-image {
-    max-height: 45vh;
-    /* max-width: 85vw; */
+    height: 45vh;
+    max-width: 85vw;
+  }
+  
+  .character-container {
+    height: 45vh;
   }
   
   .team-button {
