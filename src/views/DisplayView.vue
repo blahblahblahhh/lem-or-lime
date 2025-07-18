@@ -128,9 +128,9 @@ onBeforeUnmount(() => {
 }
 
 .fullscreen-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width: 100vw;
+  height: 100vh;
+  object-fit: fill;
   position: absolute;
   top: 0;
   left: 0;
